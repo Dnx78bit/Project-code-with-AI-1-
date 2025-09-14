@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChainAI - Masa Depan Teknologi Blockchain & AI</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js untuk animasi 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS untuk animasi scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Chart.js untuk visualisasi data -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Custom CSS untuk tema */
+        :root {
+            --primary-dark: #0f172a;
+            --primary-purple: #6d28d9;
+            --primary-green: #10b981;
+            --primary-blue: #1e40af;
+            --secondary-dark: #1e293b;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        
+        body {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Gradient untuk latar belakang */
+        .gradient-bg {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-purple), var(--primary-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Efek glow untuk tombol dan elemen penting */
+        .glow {
+            box-shadow: 0 0 15px rgba(109, 40, 217, 0.5);
+        }
+        
+        .glow-green {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+        }
+        
+        /* Animasi untuk partikel */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        /* Canvas untuk animasi 3D */
+        #blockchain-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-purple);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-green);
+        }
+        
+        /* Animasi hover untuk kartu */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(109, 40, 217, 0.3);
+        }
+        
+        /* Animasi untuk tombol */
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-animate:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+        
+        .btn-animate:hover:before {
+            left: 100%;
+        }
+        
+        /* Efek ketik untuk teks hero */
+        .typing-effect {
+            overflow: hidden;
+            border-right: 2px solid var(--primary-green);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-green) }
+        }
+        
+        /* Loading animation */
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-green);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .typing-effect {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed w-full z-50 gradient-bg backdrop-blur-sm py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-green-500 flex items-center justify-center">
+                    <i class="fas fa-cube text-white"></i>
+                </div>
+                <span class="text-xl font-bold">ChainAI</span>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="hover:text-green-400 transition">Beranda</a>
+                <a href="#about" class="hover:text-green-400 transition">Tentang</a>
+                <a href="#features" class="hover:text-green-400 transition">Fitur</a>
+                <a href="#demo" class="hover:text-green-400 transition">Demo</a>
+                <a href="#team" class="hover:text-green-400 transition">Tim</a>
+                <a href="#faq" class="hover:text-green-400 transition">FAQ</a>
+            </nav>
+            
+            <button class="md:hidden text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div id="blockchain-canvas"></div>
+        
+        <div class="container mx-auto px-6 py-20 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6" data-aos="fade-up">
+                Masa Depan <span class="gradient-text">Blockchain & AI</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                Menggabungkan teknologi blockchain terdesentralisasi dengan kecerdasan buatan untuk menciptakan solusi inovatif
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10" data-aos="fade-up" data-aos-delay="400">
+                <button class="btn-animate px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium glow">
+                    Mulai Sekarang
+                </button>
+                <button class="btn-animate px-8 py-3 bg-transparent border-2 border-green-500 hover:bg-green-500/10 rounded-lg font-medium glow-green">
+                    Pelajari Lebih Lanjut
+                </button>
+            </div>
+            
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto" data-aos="fade-up" data-aos-delay="600">
+                <div class="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl card-hover">
+                    <div class="text-green-500 text-3xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Keamanan Terjamin</h3>
+                    <p class="text-slate-400">Teknologi blockchain enkripsi tingkat tinggi untuk melindungi data Anda</p>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl card-hover">
+                    <div class="text-purple-500 text-3xl mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">AI Canggih</h3>
+                    <p class="text-slate-400">Algoritma machine learning terbaru untuk analisis data presisi</p>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl card-hover">
+                    <div class="text-blue-500 text-3xl mb-4">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Transaksi Cepat</h3>
+                    <p class="text-slate-400">Proses transaksi instan dengan biaya minimal di seluruh jaringan</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Tentang <span class="gradient-text">ChainAI</span>
+                </h2>
+                <p class="text-xl text-slate-400 max-w-3xl mx-auto">
+                    Platform revolusioner yang menggabungkan kekuatan blockchain dan AI untuk menciptakan solusi terdepan
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right">
+                    <h3 class="text-2xl font-bold mb-4">Apa itu Blockchain?</h3>
+                    <p class="mb-4 text-slate-300">
+                        Blockchain adalah teknologi buku besar terdistribusi yang mencatat transaksi di banyak komputer sehingga catatan tersebut tidak dapat diubah secara retroaktif. Ini menciptakan sistem yang transparan, aman, dan terdesentralisasi.
+                    </p>
+                    <p class="mb-6 text-slate-300">
+                        Dengan ChainAI, kami memanfaatkan teknologi ini untuk menciptakan ekosistem yang dapat dipercaya untuk berbagai aplikasi, mulai dari keuangan hingga manajemen rantai pasokan.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold mb-4 mt-8">Apa itu AI dalam ChainAI?</h3>
+                    <p class="mb-4 text-slate-300">
+                        Kecerdasan Buatan (AI) dalam platform ChainAI digunakan untuk menganalisis data, mengidentifikasi pola, dan membuat prediksi yang akurat. Kombinasi AI dengan blockchain menciptakan sistem yang tidak hanya cerdas tetapi juga transparan dan dapat diaudit.
+                    </p>
+                    <p class="text-slate-300">
+                        Algoritma machine learning kami terus belajar dan berkembang, memberikan wawasan yang semakin akurat seiring waktu.
+                    </p>
+                </div>
+                
+                <div data-aos="fade-left">
+                    <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl">
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold mb-4">Teknologi Kami</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span>Blockchain Security</span>
+                                        <span>95%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span>AI Accuracy</span>
+                                        <span>92%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                        <div class="bg-purple-500 h-2.5 rounded-full" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span>Transaction Speed</span>
+                                        <span>88%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                        <div class="bg-blue-500 h-2.5 rounded-full" style="width: 88%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span>User Satisfaction</span>
+                                        <span>97%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 97%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="text-xl font-bold mb-4">Blockchain Network Visualization</h4>
+                            <div id="blockchain-viz" class="h-64 rounded-lg bg-slate-900 flex items-center justify-center">
+                                <canvas id="network-canvas" width="400" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-slate-900/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Fitur <span class="gradient-text">Unggulan</span>
+                </h2>
+                <p class="text-xl text-slate-400 max-w-3xl mx-auto">
+                    Platform kami dilengkapi dengan berbagai fitur canggih untuk memenuhi kebutuhan teknologi Anda
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-purple-500 text-4xl mb-4">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Smart Contracts</h3>
+                    <p class="text-slate-400 mb-4">
+                        Kontrak cerdas yang dieksekusi secara otomatis ketika kondisi terpenuhi, menghilangkan kebutuhan perantara.
+                    </p>
+                    <a href="#" class="text-green-400 hover:text-green-300 flex items-center">
+                        Pelajari lebih lanjut <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl card-hover" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Predictive Analytics</h3>
+                    <p class="text-slate-400 mb-4">
+                        Analisis prediktif berbasis AI untuk mengidentifikasi tren dan membuat keputusan berbasis data yang lebih baik.
+                    </p>
+                    <a href="#" class="text-green-400 hover:text-green-300 flex items-center">
+                        Pelajari lebih lanjut <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl card-hover" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-blue-500 text-4xl mb-4">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Enhanced Security</h3>
+                    <p class="text-slate-400 mb-4">
+                        Keamanan tingkat enterprise dengan enkripsi end-to-end dan mekanisme konsensus yang kuat.
+                    </p>
+                    <a href="#" class="text-green-400 hover:text-green-300 flex items-center">
+                        Pelajari lebih lanjut <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl card-hover" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-purple-500 text-4xl mb-4">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Global Scalability</h3>
+                    <p class="text-slate-400 mb-4">
+                        Infrastruktur yang dapat diskalakan secara global untuk mendukung jutaan transaksi per detik.
+                    </p>
+                    <a href="#" class="text-green-400 hover:text-green-300 flex items-center">
+                        Pelajari lebih lanjut <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl card-hover" data-aos="fade-up" data-aos-delay="500">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">AI Integration</h3>
+                    <p class="text-slate-400 mb-4">
+                        Integrasi AI yang mulus untuk otomatisasi proses dan pengambilan keputusan yang lebih cerdas.
+                    </p>
+                    <a href="#" class="text-green-400 hover:text-green-300 flex items-center">
+                        Pelajari lebih lanjut <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl card-hover" data-aos="fade-up" data-aos-delay="600">
+                    <div class="text-blue-500 text-4xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Community Governance</h3>
+                    <p class="text-slate-400 mb-4">
+                        Sistem tata kelola berbasis komunitas yang memungkinkan pengguna untuk berpartisipasi dalam pengambilan keputusan.
+                    </p>
+                    <a href="#" class="text-green-400 hover:text-green-300 flex items-center">
+                        Pelajari lebih lanjut <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Demo Section -->
+    <section id="demo" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="gradient-text">Demo Interaktif</span>
+                </h2>
+                <p class="text-xl text-slate-400 max-w-3xl mx-auto">
+                    Jelajahi cara kerja teknologi kami melalui demo interaktif ini
+                </p>
+            </div>
+            
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex flex-wrap border-b border-slate-700 mb-8">
+                    <button class="tab-btn px-4 py-2 font-medium text-green-400 border-b-2 border-green-400" data-tab="blockchain">
+                        Blockchain Demo
+                    </button>
+                    <button class="tab-btn px-4 py-2 font-medium text-slate-400 hover:text-white" data-tab="ai">
+                        AI Demo
+                    </button>
+                    <button class="tab-btn px-4 py-2 font-medium text-slate-400 hover:text-white" data-tab="smartcontract">
+                        Smart Contract
+                    </button>
+                </div>
+                
+                <div id="blockchain" class="tab-content">
+                    <h3 class="text-2xl font-bold mb-6">Visualisasi Transaksi Blockchain</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <p class="mb-4 text-slate-300">
+                                Setiap transaksi dalam blockchain diverifikasi oleh node-node dalam jaringan dan ditambahkan ke dalam blok. Setiap blok berisi hash dari blok sebelumnya, menciptakan rantai yang tidak dapat diubah.
+                            </p>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-slate-400 mb-2">Jumlah Transaksi</label>
+                                    <input type="range" id="transaction-amount" min="1" max="10" value="5" class="w-full">
+                                    <span id="transaction-value" class="text-green-400">5</span> transaksi
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-2">Kecepatan Visualisasi</label>
+                                    <input type="range" id="visualization-speed" min="1" max="10" value="5" class="w-full">
+                                    <span id="speed-value" class="text-green-400">5</span>
+                                </div>
+                                <button id="start-blockchain" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium">
+                                    Mulai Simulasi
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div id="blockchain-demo" class="h-80 bg-slate-900 rounded-lg flex items-center justify-center">
+                                <canvas id="blockchain-canvas-demo" width="500" height="320"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="ai" class="tab-content hidden">
+                    <h3 class="text-2xl font-bold mb-6">Demo Analisis AI</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <p class="mb-4 text-slate-300">
+                                AI kami dapat menganalisis pola data dan membuat prediksi yang akurat. Coba masukkan data di bawah ini untuk melihat bagaimana AI kami bekerja.
+                            </p>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-slate-400 mb-2">Dataset</label>
+                                    <select id="ai-dataset" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2">
+                                        <option value="financial">Data Keuangan</option>
+                                        <option value="supply">Rantai Pasokan</option>
+                                        <option value="healthcare">Kesehatan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-2">Model AI</label>
+                                    <select id="ai-model" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2">
+                                        <option value="neural">Jaringan Neural</option>
+                                        <option value="random">Random Forest</option>
+                                        <option value="svm">SVM</option>
+                                    </select>
+                                </div>
+                                <button id="run-ai" class="px-6 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium">
+                                    Jalankan Analisis
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div id="ai-demo" class="h-80 bg-slate-900 rounded-lg flex items-center justify-center">
+                                <canvas id="ai-canvas-demo" width="500" height="320"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="smartcontract" class="tab-content hidden">
+                    <h3 class="text-2xl font-bold mb-6">Demo Smart Contract</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <p class="mb-4 text-slate-300">
+                                Smart contract adalah program yang berjalan di blockchain yang secara otomatis mengeksekusi ketika kondisi terpenuhi. Coba smart contract sederhana kami di bawah ini.
+                            </p>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-slate-400 mb-2">Jenis Kontrak</label>
+                                    <select id="contract-type" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2">
+                                        <option value="payment">Pembayaran Otomatis</option>
+                                        <option value="escrow">Escrow</option>
+                                        <option value="token">Token Creation</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-2">Parameter</label>
+                                    <input type="text" id="contract-param" placeholder="Masukkan parameter" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2">
+                                </div>
+                                <button id="deploy-contract" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium">
+                                    Deploy Kontrak
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div id="contract-demo" class="h-80 bg-slate-900 rounded-lg p-4 overflow-auto">
+                                <pre id="contract-code" class="text-green-400 text-sm">// Smart Contract akan muncul di sini
+pragma solidity ^0.8.0;
+
+contract SimplePayment {
+    address public payer;
+    address public payee;
+    uint public amount;
+    bool public paid;
+    
+    constructor(address _payee, uint _amount) {
+        payer = msg.sender;
+        payee = _payee;
+        amount = _amount;
+        paid = false;
+    }
+    
+    function makePayment() public payable {
+        require(msg.sender == payer, "Only payer can make payment");
+        require(msg.value == amount, "Incorrect amount");
+        require(!paid, "Payment already made");
+        
+        paid = true;
+        payable(payee).transfer(amount);
+    }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section id="team" class="py-20 bg-slate-900/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Tim <span class="gradient-text">Kami</span>
+                </h2>
+                <p class="text-xl text-slate-400 max-w-3xl mx-auto">
+                    Tim ahli kami terdiri dari profesional berpengalaman di bidang blockchain dan AI
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden border-4 border-purple-500">
+                        <img src="Random User" alt="Team member" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">Danisworo</h3>
+                    <p class="text-green-400 mb-3">CEO & Founder</p>
+                    <p class="text-slate-400 text-sm">Study in Computer Science dengan 15+ tahun pengalaman di Cyber Security</p>
+                    <div class="flex justify-center space-x-3 mt-4">
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden border-4 border-green-500">
+                        <img src="Random User" alt="Team member" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">Orang 2</h3>
+                    <p class="text-green-400 mb-3">CTO</p>
+                    <p class="text-slate-400 text-sm">Ahli AI dan Machine Learning dengan publikasi internasional</p>
+                    <div class="flex justify-center space-x-3 mt-4">
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden border-4 border-blue-500">
+                        <img src="Random User" alt="Team member" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">Orang 3</h3>
+                    <p class="text-green-400 mb-3">Head of Engineering</p>
+                    <p class="text-slate-400 text-sm">Spesialis blockchain dengan pengalaman di berbagai proyek enterprise</p>
+                    <div class="flex justify-center space-x-3 mt-4">
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div class="text-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden border-4 border-purple-500">
+                        <img src="Random User" alt="Team member" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">Orang 4</h3>
+                    <p class="text-green-400 mb-3">Head of AI Research</p>
+                    <p class="text-slate-400 text-sm">Peneliti AI dengan fokus pada deep learning dan neural networks</p>
+                    <div class="flex justify-center space-x-3 mt-4">
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-20 text-center" data-aos="fade-up" data-aos-delay="500">
+                <h3 class="text-2xl font-bold mb-6">Mitra & Investor</h3>
+                <div class="flex flex-wrap justify-center items-center gap-8">
+                    <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-lg w-32 h-16 flex items-center justify-center">
+                        <span class="text-slate-400 font-bold">TechVenture</span>
+                    </div>
+                    <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-lg w-32 h-16 flex items-center justify-center">
+                        <span class="text-slate-400 font-bold">CryptoFund</span>
+                    </div>
+                    <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-lg w-32 h-16 flex items-center justify-center">
+                        <span class="text-slate-400 font-bold">AI Capital</span>
+                    </div>
+                    <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-lg w-32 h-16 flex items-center justify-center">
+                        <span class="text-slate-400 font-bold">FutureTech</span>
+                    </div>
+                    <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-lg w-32 h-16 flex items-center justify-center">
+                        <span class="text-slate-400 font-bold">InnovateX</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Pertanyaan <span class="gradient-text">Umum</span>
+                </h2>
+                <p class="text-xl text-slate-400 max-w-3xl mx-auto">
+                    Temukan jawaban untuk pertanyaan yang sering diajukan tentang platform kami
+                </p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                <div class="space-y-4">
+                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center">
+                            <span class="font-bold">Apa itu ChainAI dan bagaimana cara kerjanya?</span>
+                            <i class="fas fa-chevron-down text-green-400"></i>
+                        </button>
+                        <div class="faq-answer hidden p-6 pt-0 text-slate-300">
+                            ChainAI adalah platform yang menggabungkan teknologi blockchain dengan kecerdasan buatan. Blockchain menyediakan lapisan keamanan dan transparansi, sementara AI memberikan kemampuan analisis dan prediksi. Platform ini bekerja dengan menyimpan data di blockchain yang aman dan menggunakan algoritma AI untuk menganalisis data tersebut, menghasilkan wawasan yang dapat ditindaklanjuti.
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center">
+                            <span class="font-bold">Bagaimana keamanan data dijamin dalam platform ChainAI?</span>
+                            <i class="fas fa-chevron-down text-green-400"></i>
+                        </button>
+                        <div class="faq-answer hidden p-6 pt-0 text-slate-300">
+                            Keamanan data di ChainAI dijamin melalui beberapa lapisan. Pertama, semua data disimpan di blockchain yang terenkripsi dan terdesentralisasi, membuatnya hampir tidak mungkin untuk diubah atau diretas. Kedua, kami menggunakan protokol keamanan tingkat enterprise termasuk enkripsi end-to-end dan autentikasi multi-faktor. Terakhir, sistem kami secara rutin diaudit oleh pihak ketiga independen untuk memastikan kepatuhan terhadap standar keamanan tertinggi.
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center">
+                            <span class="font-bold">Siapa yang dapat menggunakan platform ChainAI?</span>
+                            <i class="fas fa-chevron-down text-green-400"></i>
+                        </button>
+                        <div class="faq-answer hidden p-6 pt-0 text-slate-300">
+                            Platform ChainAI dirancang untuk berbagai pengguna, mulai dari individu hingga enterprise. Pengguna individu dapat memanfaatkan platform untuk transaksi keuangan yang aman dan analisis data pribadi. Bisnis kecil dan menengah dapat menggunakan ChainAI untuk manajemen rantai pasokan, pembayaran otomatis, dan analisis pelanggan. Perusahaan besar dapat mengintegrasikan ChainAI ke dalam sistem mereka untuk solusi enterprise yang lebih kompleks seperti manajemen risiko, deteksi penipuan, dan optimasi operasional.
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center">
+                            <span class="font-bold">Bagaimana cara memulai dengan ChainAI?</span>
+                            <i class="fas fa-chevron-down text-green-400"></i>
+                        </button>
+                        <div class="faq-answer hidden p-6 pt-0 text-slate-300">
+                            Memulai dengan ChainAI sangat mudah. Pertama, daftar akun di platform kami dengan mengisi informasi dasar Anda. Kedua, verifikasi identitas Anda melalui proses KYC (Know Your Customer) yang aman. Setelah akun Anda diverifikasi, Anda dapat mulai menggunakan fitur-fitur dasar seperti dompet digital dan transaksi sederhana. Untuk fitur yang lebih canggih seperti smart contract dan analisis AI, Anda dapat mengikuti tutorial kami atau menghubungi tim dukungan kami untuk panduan lebih lanjut.
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center">
+                            <span class="font-bold">Apa biaya yang terkait dengan menggunakan ChainAI?</span>
+                            <i class="fas fa-chevron-down text-green-400"></i>
+                        </button>
+                        <div class="faq-answer hidden p-6 pt-0 text-slate-300">
+                            ChainAI menawarkan berbagai tingkat harga yang sesuai dengan kebutuhan pengguna. Kami memiliki paket gratis untuk pengguna individu dengan fitur dasar. Untuk bisnis kecil dan menengah, kami menawarkan paket berlangganan bulanan dengan biaya mulai dari $50 per bulan. Untuk perusahaan besar, kami menyediakan solusi enterprise kustom dengan harga berdasarkan kebutuhan spesifik. Semua transaksi di blockchain dikenakan biaya jaringan yang minimal, biasanya kurang dari 1% dari nilai transaksi.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-900/50 to-green-900/50">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6" data-aos="fade-up">
+                Siap untuk Masa Depan <span class="gradient-text">Teknologi</span>?
+            </h2>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="200">
+                Bergabunglah dengan ribuan pengguna yang telah mengalami kekuatan kombinasi blockchain dan AI
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up" data-aos-delay="400">
+                <button class="btn-animate px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium glow">
+                    Daftar Sekarang
+                </button>
+                <button class="btn-animate px-8 py-3 bg-transparent border-2 border-green-500 hover:bg-green-500/10 rounded-lg font-medium glow-green">
+                    Jadwalkan Demo
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 bg-slate-900/80">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-green-500 flex items-center justify-center">
+                            <i class="fas fa-cube text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">ChainAI</span>
+                    </div>
+                    <p class="text-slate-400 mb-4">
+                        Platform revolusioner yang menggabungkan blockchain dan AI untuk solusi masa depan.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Tautan Cepat</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-slate-400 hover:text-white">Beranda</a></li>
+                        <li><a href="#about" class="text-slate-400 hover:text-white">Tentang</a></li>
+                        <li><a href="#features" class="text-slate-400 hover:text-white">Fitur</a></li>
+                        <li><a href="#demo" class="text-slate-400 hover:text-white">Demo</a></li>
+                        <li><a href="#team" class="text-slate-400 hover:text-white">Tim</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Sumber Daya</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-slate-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-white">Dokumentasi</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-white">API</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-white">Support</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-white">Karir</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Kontak</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-green-400 mt-1 mr-2"></i>
+                            <span class="text-slate-400">Location</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone text-green-400 mr-2"></i>
+                            <span class="text-slate-400">+Number</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope text-green-400 mr-2"></i>
+                            <span class="text-slate-400">@Gmail</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 mt-12 pt-8 text-center text-slate-500">
+                <p>&copy; 2025 ChainAI. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Inisialisasi AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+        
+        // Smooth scrolling untuk navigasi
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+                
+                answer.classList.toggle('hidden');
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            });
+        });
+        
+        // Tab functionality untuk demo section
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(b => {
+                    b.classList.remove('text-green-400', 'border-b-2', 'border-green-400');
+                    b.classList.add('text-slate-400');
+                });
+                
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Add active class to clicked button and corresponding content
+                btn.classList.remove('text-slate-400');
+                btn.classList.add('text-green-400', 'border-b-2', 'border-green-400');
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+        
+        // Blockchain visualization di about section
+        const networkCanvas = document.getElementById('network-canvas');
+        const networkCtx = networkCanvas.getContext('2d');
+        
+        function drawNetwork() {
+            const width = networkCanvas.width;
+            const height = networkCanvas.height;
+            
+            // Clear canvas
+            networkCtx.clearRect(0, 0, width, height);
+            
+            // Draw nodes
+            const nodes = [];
+            const nodeCount = 8;
+            
+            for (let i = 0; i < nodeCount; i++) {
+                const angle = (i / nodeCount) * Math.PI * 2;
+                const radius = Math.min(width, height) * 0.3;
+                const x = width / 2 + Math.cos(angle) * radius;
+                const y = height / 2 + Math.sin(angle) * radius;
+                
+                nodes.push({ x, y });
+                
+                // Draw node
+                networkCtx.beginPath();
+                networkCtx.arc(x, y, 8, 0, Math.PI * 2);
+                networkCtx.fillStyle = '#10b981';
+                networkCtx.fill();
+            }
+            
+            // Draw connections
+            networkCtx.strokeStyle = 'rgba(109, 40, 217, 0.3)';
+            networkCtx.lineWidth = 2;
+            
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    networkCtx.beginPath();
+                    networkCtx.moveTo(nodes[i].x, nodes[i].y);
+                    networkCtx.lineTo(nodes[j].x, nodes[j].y);
+                    networkCtx.stroke();
+                }
+            }
+            
+            // Draw center node
+            networkCtx.beginPath();
+            networkCtx.arc(width / 2, height / 2, 12, 0, Math.PI * 2);
+            networkCtx.fillStyle = '#6d28d9';
+            networkCtx.fill();
+            
+            // Connect center to all nodes
+            for (let i = 0; i < nodes.length; i++) {
+                networkCtx.beginPath();
+                networkCtx.moveTo(width / 2, height / 2);
+                networkCtx.lineTo(nodes[i].x, nodes[i].y);
+                networkCtx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+                networkCtx.lineWidth = 2;
+                networkCtx.stroke();
+            }
+        }
+        
+        drawNetwork();
+        
+        // Blockchain demo
+        const blockchainCanvas = document.getElementById('blockchain-canvas-demo');
+        const blockchainCtx = blockchainCanvas.getContext('2d');
+        const transactionAmount = document.getElementById('transaction-amount');
+        const transactionValue = document.getElementById('transaction-value');
+        const visualizationSpeed = document.getElementById('visualization-speed');
+        const speedValue = document.getElementById('speed-value');
+        const startBlockchainBtn = document.getElementById('start-blockchain');
+        
+        transactionAmount.addEventListener('input', () => {
+            transactionValue.textContent = transactionAmount.value;
+        });
+        
+        visualizationSpeed.addEventListener('input', () => {
+            speedValue.textContent = visualizationSpeed.value;
+        });
+        
+        let blockchainAnimation;
+        
+        startBlockchainBtn.addEventListener('click', () => {
+            if (blockchainAnimation) {
+                cancelAnimationFrame(blockchainAnimation);
+            }
+            
+            const blocks = [];
+            const transactions = parseInt(transactionAmount.value);
+            const speed = parseInt(visualizationSpeed.value);
+            
+            // Initialize blocks
+            for (let i = 0; i < 5; i++) {
+                blocks.push({
+                    x: 50 + i * 90,
+                    y: 150,
+                    width: 80,
+                    height: 100,
+                    color: `hsl(${250 + i * 10}, 70%, 50%)`,
+                    transactions: []
+                });
+            }
+            
+            // Add transactions to blocks
+            for (let i = 0; i < transactions; i++) {
+                const blockIndex = Math.floor(Math.random() * blocks.length);
+                blocks[blockIndex].transactions.push({
+                    id: `TX-${i + 1}`,
+                    amount: Math.floor(Math.random() * 1000) + 100
+                });
+            }
+            
+            function animateBlockchain() {
+                blockchainCtx.clearRect(0, 0, blockchainCanvas.width, blockchainCanvas.height);
+                
+                // Draw blocks
+                blocks.forEach((block, index) => {
+                    // Draw block
+                    blockchainCtx.fillStyle = block.color;
+                    blockchainCtx.fillRect(block.x, block.y, block.width, block.height);
+                    
+                    // Draw block border
+                    blockchainCtx.strokeStyle = '#10b981';
+                    blockchainCtx.lineWidth = 2;
+                    blockchainCtx.strokeRect(block.x, block.y, block.width, block.height);
+                    
+                    // Draw block number
+                    blockchainCtx.fillStyle = '#ffffff';
+                    blockchainCtx.font = 'bold 14px Arial';
+                    blockchainCtx.textAlign = 'center';
+                    blockchainCtx.fillText(`Block ${index + 1}`, block.x + block.width / 2, block.y + 20);
+                    
+                    // Draw transactions
+                    blockchainCtx.font = '10px Arial';
+                    block.transactions.forEach((tx, txIndex) => {
+                        blockchainCtx.fillText(tx.id, block.x + block.width / 2, block.y + 40 + txIndex * 15);
+                        blockchainCtx.fillText(`$${tx.amount}`, block.x + block.width / 2, block.y + 50 + txIndex * 15);
+                    });
+                    
+                    // Draw hash
+                    blockchainCtx.fillStyle = '#94a3b8';
+                    blockchainCtx.font = '8px Arial';
+                    const hash = `0x${Math.random().toString(16).substr(2, 8)}`;
+                    blockchainCtx.fillText(hash, block.x + block.width / 2, block.y + block.height - 10);
+                    
+                    // Draw connection to next block
+                    if (index < blocks.length - 1) {
+                        blockchainCtx.beginPath();
+                        blockchainCtx.moveTo(block.x + block.width, block.y + block.height / 2);
+                        blockchainCtx.lineTo(blocks[index + 1].x, blocks[index + 1].y + blocks[index + 1].height / 2);
+                        blockchainCtx.strokeStyle = '#6d28d9';
+                        blockchainCtx.lineWidth = 2;
+                        blockchainCtx.stroke();
+                    }
+                });
+                
+                // Move blocks
+                blocks.forEach(block => {
+                    block.x -= speed / 10;
+                    
+                    // Reset block position when it goes off screen
+                    if (block.x + block.width < 0) {
+                        block.x = blockchainCanvas.width;
+                    }
+                });
+                
+                blockchainAnimation = requestAnimationFrame(animateBlockchain);
+            }
+            
+            animateBlockchain();
+        });
+        
+        // AI Demo
+        const aiCanvas = document.getElementById('ai-canvas-demo');
+        const aiCtx = aiCanvas.getContext('2d');
+        const runAiBtn = document.getElementById('run-ai');
+        const aiDataset = document.getElementById('ai-dataset');
+        const aiModel = document.getElementById('ai-model');
+        
+        let aiChart;
+        
+        runAiBtn.addEventListener('click', () => {
+            // Clear previous chart if exists
+            if (aiChart) {
+                aiChart.destroy();
+            }
+            
+            // Generate random data based on dataset selection
+            let data;
+            let labels;
+            
+            switch (aiDataset.value) {
+                case 'financial':
+                    labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                    data = labels.map(() => Math.floor(Math.random() * 100) + 20);
+                    break;
+                case 'supply':
+                    labels = ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'];
+                    data = labels.map(() => Math.floor(Math.random() * 100) + 20);
+                    break;
+                case 'healthcare':
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    data = labels.map(() => Math.floor(Math.random() * 100) + 20);
+                    break;
+            }
+            
+            // Create chart
+            aiChart = new Chart(aiCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Actual Data',
+                        data: data,
+                        borderColor: '#6d28d9',
+                        backgroundColor: 'rgba(109, 40, 217, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'AI Prediction',
+                        data: data.map(d => d + (Math.random() * 20 - 10)),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e2e8f0'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Smart Contract Demo
+        const contractType = document.getElementById('contract-type');
+        const contractParam = document.getElementById('contract-param');
+        const deployContractBtn = document.getElementById('deploy-contract');
+        const contractCode = document.getElementById('contract-code');
+        
+        const contractTemplates = {
+            payment: `pragma solidity ^0.8.0;
+
+contract SimplePayment {
+    address public payer;
+    address public payee;
+    uint public amount;
+    bool public paid;
+    
+    constructor(address _payee, uint _amount) {
+        payer = msg.sender;
+        payee = _payee;
+        amount = _amount;
+        paid = false;
+    }
+    
+    function makePayment() public payable {
+        require(msg.sender == payer, "Only payer can make payment");
+        require(msg.value == amount, "Incorrect amount");
+        require(!paid, "Payment already made");
+        
+        paid = true;
+        payable(payee).transfer(amount);
+    }
+}`,
+            escrow: `pragma solidity ^0.8.0;
+
+contract Escrow {
+    address public payer;
+    address public payee;
+    address public arbiter;
+    uint public amount;
+    bool public fundsDisbursed;
+    
+    constructor(address _payee, address _arbiter, uint _amount) {
+        payer = msg.sender;
+        payee = _payee;
+        arbiter = _arbiter;
+        amount = _amount;
+        fundsDisbursed = false;
+    }
+    
+    function releaseFunds() public {
+        require(msg.sender == arbiter, "Only arbiter can release funds");
+        require(!fundsDisbursed, "Funds already disbursed");
+        
+        fundsDisbursed = true;
+        payable(payee).transfer(amount);
+    }
+    
+    function refundPayer() public {
+        require(msg.sender == arbiter, "Only arbiter can refund");
+        require(!fundsDisbursed, "Funds already disbursed");
+        
+        fundsDisbursed = true;
+        payable(payer).transfer(amount);
+    }
+}`,
+            token: `pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract CustomToken is ERC20 {
+    address public owner;
+    
+    constructor(string memory name, string memory symbol, uint initialSupply) ERC20(name, symbol) {
+        owner = msg.sender;
+        _mint(msg.sender, initialSupply * 10 ** decimals());
+    }
+    
+    function mint(address to, uint amount) public {
+        require(msg.sender == owner, "Only owner can mint");
+        _mint(to, amount * 10 ** decimals());
+    }
+    
+    function burn(uint amount) public {
+        _burn(msg.sender, amount * 10 ** decimals());
+    }
+}`
+        };
+        
+        deployContractBtn.addEventListener('click', () => {
+            const selectedContract = contractType.value;
+            contractCode.textContent = contractTemplates[selectedContract];
+            
+            // Add animation effect
+            contractCode.style.opacity = '0';
+            setTimeout(() => {
+                contractCode.style.transition = 'opacity 0.5s';
+                contractCode.style.opacity = '1';
+            }, 100);
+        });
+        
+        // Three.js animation untuk hero section
+        let scene, camera, renderer, particles;
+        
+        function initThreeJS() {
+            const canvas = document.getElementById('blockchain-canvas');
+            
+            // Scene setup
+            scene = new THREE.Scene();
+            
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+            
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 500;
+            const posArray = new Float32Array(particlesCount * 3);
+            
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 100;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            // Material
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0x10b981,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            // Mesh
+            particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+            
+            // Create nodes for blockchain visualization
+            const nodeGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const nodeMaterial = new THREE.MeshBasicMaterial({ color: 0x6d28d9 });
+            
+            const nodes = [];
+            const nodeCount = 8;
+            
+            for (let i = 0; i < nodeCount; i++) {
+                const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                
+                const angle = (i / nodeCount) * Math.PI * 2;
+                const radius = 15;
+                node.position.x = Math.cos(angle) * radius;
+                node.position.y = Math.sin(angle) * radius;
+                node.position.z = (Math.random() - 0.5) * 10;
+                
+                nodes.push(node);
+                scene.add(node);
+            }
+            
+            // Create connections between nodes
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.5 });
+            
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const points = [];
+                    points.push(nodes[i].position);
+                    points.push(nodes[j].position);
+                    
+                    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    scene.add(line);
+                }
+            }
+            
+            // Center node
+            const centerNode = new THREE.Mesh(nodeGeometry, new THREE.MeshBasicMaterial({ color: 0x10b981 }));
+            scene.add(centerNode);
+            
+            // Connect center to all nodes
+            for (let i = 0; i < nodes.length; i++) {
+                const points = [];
+                points.push(centerNode.position);
+                points.push(nodes[i].position);
+                
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                scene.add(line);
+            }
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate particles
+                particles.rotation.x += 0.001;
+                particles.rotation.y += 0.001;
+                
+                // Rotate nodes
+                nodes.forEach((node, index) => {
+                    const angle = (index / nodes.length) * Math.PI * 2 + Date.now() * 0.0001;
+                    const radius = 15;
+                    node.position.x = Math.cos(angle) * radius;
+                    node.position.y = Math.sin(angle) * radius;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // Initialize Three.js when page loads
+        window.addEventListener('load', initThreeJS);
+    </script>
+</body>
+</html>
